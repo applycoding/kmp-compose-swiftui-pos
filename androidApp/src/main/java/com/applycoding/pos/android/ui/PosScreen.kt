@@ -25,6 +25,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.applycoding.pos.Discount
 import com.applycoding.pos.Product
@@ -57,7 +58,7 @@ fun PosScreen(
             Text("Basket (${state.cart.itemCount})", style = MaterialTheme.typography.titleLarge)
             LazyColumn(Modifier.weight(1f).testTag("basket")) {
                 items(state.cart.lines, key = { it.product.sku }) { line ->
-                    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp).testTag("line-${line.product.sku}")) {
+                    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp).semantics(mergeDescendants = true) {}.testTag("line-${line.product.sku}")) {
                         Text("${line.quantity} x ${line.product.name}", Modifier.weight(1f))
                         TextButton({ onQuantity(line.product.sku, line.quantity - 1) }, Modifier.testTag("dec-${line.product.sku}")) { Text("-") }
                         Text(line.net.format())
@@ -86,7 +87,7 @@ fun PosScreen(
 
 @Composable
 private fun TotalRow(label: String, value: String, modifier: Modifier = Modifier) {
-    Row(modifier.fillMaxWidth()) {
+    Row(modifier.fillMaxWidth().semantics(mergeDescendants = true) {}) {
         Text(label, Modifier.weight(1f))
         Text(value)
     }
